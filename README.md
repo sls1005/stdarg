@@ -21,6 +21,6 @@ proc sum(x: int): int {.varargs.} =
 echo sum(1, 2, 3, 0)
 ```
 
-To make a procedure that takes variable number of parameters, mark it as `{.varargs.}` and declare a variable of type `VAList`. After that, call `init` with the last parameter name to initialize it. Call `next` to store the next argument into a variable.
+To make a procedure that takes variable number of parameters, mark it as `{.varargs.}` and declare a variable of type `VAList`. After that, call `init` with the last parameter name to initialize it. Use `next` to store the next argument into a variable.
 
 Note that `{.varargs.}` is a built-in pragma. It tells the compiler that the procedure can take more parameters.
