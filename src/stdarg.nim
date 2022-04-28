@@ -8,12 +8,14 @@ type VAList* {.importc: "va_list", nodecl.} = object
 proc va_start*(ap: VAList, last: auto)
 proc va_end*(ap: VAList)
 proc va_copy*(dest, src: VAList)
-#proc va_arg[T](ap: VAList, typ: typedesc[T]): T {.error.}
 
 {.pop.}
 
 when defined(cpp):
   proc va_arg[T](ap: VAList, typ: typedesc[T]): T {.importcpp: "va_arg(#, '0)".}
+else:
+  #proc va_arg[T](ap: VAList, typ: typedesc[T]): T {.error.}
+  discard
 
 {.pop.}
 
