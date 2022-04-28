@@ -8,15 +8,22 @@ type VAList* {.importc: "va_list", nodecl.} = object
 proc va_start*(ap: VAList, last: auto)
 proc va_end*(ap: VAList)
 proc va_copy*(dest, src: VAList)
-#proc va_arg*[T](ap: va_list, typ: typedesc[T]): T {.error.}
+#proc va_arg[T](ap: VAList, typ: typedesc[T]): T {.error.}
 
 {.pop.}
+
+when defined(cpp):
+  proc va_arg[T](ap: VAList, typ: typedesc[T]): T {.importcpp: "va_arg(#, '0)".}
+
 {.pop.}
 
-template init*(self: var VAList, lastParam: typed): untyped =
+template init*(self: VAList, lastParam: typed): untyped =
   #This takes the last parameter of a procedure
   va_start(self, lastParam)
   defer: va_end(self)
 
-template next*[T](self: var VAList, dest: var T): untyped =
-  {.emit: [dest, "= va_arg(", self, ", ", T, ");"].}
+template next*[T](self: VAList, dest: var T): untyped =
+  when defined(cpp):
+    dest = va_arg[T](self, T)
+  else:
+    {.emit: [dest, "= va_arg(", self, ", ", T, ");"].}
