@@ -2,25 +2,21 @@
 
 type VAList* {.importc: "va_list", nodecl.} = object
 
-{.push importc, nodecl, inline.}
-
 # C macros
-proc va_start*(ap: VAList, last: auto)
-proc va_end*(ap: VAList)
-proc va_copy*(dest, src: VAList)
-
-{.pop.}
+proc va_start*(v: VAList, last: auto) {.importc.}
+proc va_end*(v: VAList) {.importc.}
+proc va_copy*(dst, src: VAList) {.importc.}
 
 when defined(cpp):
-  proc va_arg[T](ap: VAList, typ: typedesc[T]): T {.importcpp: "va_arg(#, '0)".}
+  proc va_arg[T](v: VAList, typeName: typedesc[T]): T {.importcpp: "va_arg(#, '0)".}
 else:
-  #proc va_arg[T](ap: VAList, typ: typedesc[T]): T {.error.}
+  #proc va_arg[T](v: VAList, typeName: typedesc[T]): T {.error.}
   discard
 
 {.pop.}
 
 template init*(self: VAList, lastParam: typed): untyped =
-  #This takes the last parameter of a procedure
+  # This takes the last parameter of a procedure as an argument.
   va_start(self, lastParam)
   defer: va_end(self)
 
