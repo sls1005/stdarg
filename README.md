@@ -23,4 +23,10 @@ echo sum(1, 2, 3, 0)
 
 To make a procedure that takes variable number of parameters, mark it as `{.varargs.}` and declare a variable of type `VAList`. After that, call `init` with the last parameter name to initialize it. Use `next` to store the next argument into a variable.
 
-Note that `{.varargs.}` is a built-in pragma. It tells the compiler that the procedure can take more arguments.
+Note that `{.varargs.}` is a built-in pragma. It tells the compiler that the procedure is able to take more arguments.
+
+### References
+
++ https://cplusplus.com/reference/cstdarg/
++ https://cplusplus.com/reference/cstdio/
++ https://cplusplus.com/reference/cwchar/
