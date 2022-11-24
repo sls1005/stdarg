@@ -31,7 +31,7 @@ Note that `{.varargs.}` is a built-in pragma. It tells the compiler that the pro
 
 + This package is only useful when interacting with C/C++. The built-in `varargs[T]` should be used in other cases.
 
-+ For each `VAList` initialized with `init()`, `va_end` will be automatically invoked. For a `VAList` initialized with another method, `va_end` must be called once in the `same function` as it initialized. However, `va_end` don't need to be invoked if the list is never initialized.
++ For each `VAList` initialized with `init()`, `va_end` will be automatically invoked. For a `VAList` initialized with another method, `va_end` must be called once in the *same function* as it initialized. However, `va_end` don't need to be invoked if the list is never initialized.
 
 ### References
 
