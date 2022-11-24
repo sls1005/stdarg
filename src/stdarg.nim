@@ -1,19 +1,27 @@
-{.push header: "<stdarg.h>".}
+when defined(cpp):
+  type VAList* {.importcpp: "std::va_list", cppNonPod, header: "<cstdarg>".} = object
+else:
+  type VAList* {.importc: "va_list", header: "<stdarg.h>".} = object
 
-type VAList* {.importc: "va_list", nodecl.} = object
+const cstdarg = (
+  when defined(cpp):
+    "<cstdarg>"
+  else:
+    "<stdarg.h>"
+)
 
+{.push header: cstdarg, importc.}
 # C macros
 proc va_start*(v: VAList, last: auto) {.importc.}
 proc va_end*(v: VAList) {.importc.}
 proc va_copy*(dst, src: VAList) {.importc.}
+{.pop.}
 
 when defined(cpp):
-  proc va_arg[T](v: VAList, typeName: typedesc[T]): T {.importcpp: "va_arg(#, '0)".}
+  proc va_arg[T](v: VAList, typeName: typedesc[T]): T {.importcpp: "va_arg(#, '0)", header: "<cstdarg>".}
 else:
-  #proc va_arg[T](v: VAList, typeName: typedesc[T]): T {.error.}
+  #proc va_arg[T](v: VAList, typeName: typedesc[T]): T {.importc, header: "<stdarg.h>", error.}
   discard
-
-{.pop.}
 
 template init*(self: VAList, lastParam: typed): untyped =
   # This takes the last parameter of a procedure as an argument.
