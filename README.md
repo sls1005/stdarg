@@ -1,6 +1,8 @@
 # Nim stdarg
 
-This is a Nim wrapper for `<stdarg.h>`. One can use it to make a procedure taking variable number of parameters, that is about to be exported to C/C++. This is only useful when interacting with C/C++. The built-in `varargs[T]` should be used in other cases.
+This is a Nim wrapper for the standard C header `<stdarg.h>`. One can use it to make variadic procedures that can be used from C/C++.
+
+Standard C functions that take `va_list` (the list object, not `...`) as arguments are also wrapped.
 
 ### Example
 ```nim
@@ -25,8 +27,13 @@ To make a procedure that takes variable number of parameters, mark it as `{.vara
 
 Note that `{.varargs.}` is a built-in pragma. It tells the compiler that the procedure is able to take more arguments.
 
+### Note
+
++ This package is only useful when interacting with C/C++. The built-in `varargs[T]` should be used in other cases.
+
 ### References
 
 + https://cplusplus.com/reference/cstdarg/
 + https://cplusplus.com/reference/cstdio/
 + https://cplusplus.com/reference/cwchar/
++ https://en.cppreference.com/w/c/experimental/dynamic/asprintf
