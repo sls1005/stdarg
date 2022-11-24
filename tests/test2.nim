@@ -10,8 +10,8 @@ proc free(p: pointer) {.header: "<stdlib.h>", importc.}
 
 proc myfmt(f: cstring) {.varargs.} =
   var
-    v: VAList
     s: cstring
+    v {.noInit.}: VAList
   v.init(f)
   if vasprintf(s.addr, f, v) == -1:
     echo "Error"
