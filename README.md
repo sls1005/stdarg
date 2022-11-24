@@ -2,7 +2,7 @@
 
 This is a Nim wrapper for the standard C header `<stdarg.h>`. One can use it to make variadic procedures that can be used from C/C++.
 
-Standard C functions that take `va_list` (the list object, not `...`) as arguments are also wrapped (those from `<stdio.h>` are in `stdarg/io`, and those from `<wchar.h>` in `stdarg/wchar`).
+Standard C functions that take `va_list` (the list object, not "...") as arguments are also wrapped (those from `<stdio.h>` are in `stdarg/io`, and those from `<wchar.h>` in `stdarg/wchar`).
 
 ### Example
 ```nim
