@@ -1,6 +1,6 @@
 # Package
 
-version       = "0.2.1"
+version       = "0.3.0"
 author        = "Hsien-yu Chu"
 description   = "A wrapper for <stdarg.h>"
 license       = "MIT"
