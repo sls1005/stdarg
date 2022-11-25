@@ -1,10 +1,10 @@
 from ../stdarg import VAList
-from std/unicode import Rune
 
 type WideCharImpl = (
   when defined(windows):
     Utf16Char
   else:
+    from std/unicode import Rune
     Rune
 )
 
