@@ -36,7 +36,7 @@ proc vfprintf*(f: File; fmt: cstring; v: VAList): cint
 {.push header: "<stdio.h>", importc, cdecl.}
 
 proc vasprintf*(sp: ptr[cstring]; fmt: cstring; v: VAList): cint
-  ## The result must be freed with the `free` function of C (not `dealloc`), otherwise there will be a memory leak.
+  ## The result must be freed with the C function `free` (not `dealloc`), or there could be a memory leak.
   ## **Note:** This is *non-standard*.
   ##
   ## **Example:**
