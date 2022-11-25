@@ -2,17 +2,15 @@ from ../stdarg import VAList
 
 type WideCharImpl = (
   when defined(windows):
-    Utf16Char
+    uint16
   else:
-    from std/unicode import Rune
-    Rune
+    uint32
 )
 
 when defined(cpp):
   type CWideChar* {.importcpp: "wchar_t", nodecl.} = WideCharImpl
 else:
   type CWideChar* {.importc: "wchar_t", header: "<wchar.h>".} = WideCharImpl
-## Currently `Utf16Char` on Windows and `unicode.Rune` on other platforms.
 
 const
   cwchar = (
