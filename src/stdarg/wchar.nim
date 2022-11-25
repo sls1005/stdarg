@@ -1,9 +1,10 @@
 from ../stdarg import VAList
 
 when defined(cpp):
-  type CWideChar* {.importcpp: "wchar_t".} = object
+  type CWideChar* {.importcpp: "wchar_t", nodecl.} = object
 else:
   type CWideChar* {.importc: "wchar_t", header: "<wchar.h>".} = object
+  ## Do not try to cast a `CWideChar` into an `int`.
 
 const
   cwchar = (
@@ -12,12 +13,27 @@ const
     else:
       "<wchar.h>"
   )
+  cstdlib = (
+    when defined(cpp):
+      "<cstdlib>"
+    else:
+      "<stdlib.h>"
+  )
   function = (
     when defined(cpp):
       "std::$1"
     else:
       "$1"
   )
+
+{.push hint[Name]: off.}
+let
+  MB_CUR_MAX {.importc, header: cstdlib.}: csize_t
+  WCHAR_MAX {.importc, header: cwchar.}: CWideChar
+  WCHAR_MIN {.importc, header: cwchar.}: CWideChar
+{.pop.}
+
+proc wctomb(s: cstring, w: CWideChar): cint {.header: cstdlib, importc: function, cdecl.}
 
 {.push header: cwchar, importc: function, cdecl.}
 
@@ -35,14 +51,14 @@ proc vfwprintf*(f: File; fmt: ptr CWideChar; v: VAList): cint
 
 {.pop.}
 
-{.push header: cwchar, hint[Name]: off.}
+proc `$`*(w: CWideChar): string {.raises: [ValueError].} =
+  result = newString(MB_CUR_MAX + 1)
+  let n = wctomb(result.cstring, w)
+  if likely(n > -1):
+    result.setLen(n)
+  else:
+    raise newException(ValueError, "")
 
-let
-  WCHAR_MAX {.importc.}: CWideChar
-  WCHAR_MIN {.importc.}: CWideChar
+proc high*(t: typedesc[CWideChar]): CWideChar {.raises: [], noInit, inline.} = WCHAR_MAX
 
-{.pop.}
-
-proc high*(self: CWideChar): CWideChar {.noInit, inline.} = WCHAR_MAX
-
-proc low*(self: CWideChar): CWideChar {.noInit, inline.} = WCHAR_MIN
+proc low*(t: typedesc[CWideChar]): CWideChar {.raises: [], noInit, inline.} = WCHAR_MIN
